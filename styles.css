@@ -1,0 +1,135 @@
+/* Basic Layout and Container */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px; /* Source [3] mentions using border-radius for containers */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Form Styling */
+#todo-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#todo-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: #5c67f2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #4a54e1;
+}
+
+/* Filter Buttons */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter {
+    background: #eee;
+    color: #333;
+    font-size: 0.8rem;
+}
+
+.filter.active {
+    background: #5c67f2;
+    color: white;
+    font-weight: bold;
+}
+
+/* Todo List Items */
+#todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+#todo-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+#todo-list li:hover {
+    background-color: #f9f9f9;
+}
+
+/* Requirement: Completed tasks have strikethrough styling [1] */
+#todo-list li.completed span {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Requirement: Delete button appears on hover [2] */
+.delete-btn {
+    background: none;
+    color: #ff5c5c;
+    font-size: 1.2rem;
+    padding: 0 5px;
+    visibility: hidden; /* Hidden by default */
+}
+
+#todo-list li:hover .delete-btn {
+    visibility: visible; /* Appears on hover */
+}
+
+/* Stats Footer */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+#clear-completed {
+    background: none;
+    color: #ff5c5c;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+#clear-completed:hover {
+    text-decoration: underline;
+}
+
+/* Bonus: Edit Input Styling */
+#todo-list li input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    font-size: 1rem;
+}
