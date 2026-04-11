@@ -1,225 +1,98 @@
-// DOM Elements
-const form = document.getElementById("todo-form");
-const input = document.getElementById("todo-input");
-const todoList = document.getElementById("todo-list");
-const itemsLeft = document.getElementById("items-left");
-const filters = document.querySelectorAll(".filter");
-const clearCompletedBtn = document.getElementById("clear-completed");
+// 1. Select the elements from the HTML
+const todoInput = document.getElementById('todoInput');
+const addBtn = document.getElementById('addBtn');
+const todoList = document.getElementById('todoList');
+const totalCount = document.getElementById('totalCount');
+const activeCount = document.getElementById('activeCount');
+const doneCount = document.getElementById('doneCount');
+const filterBtns = document.querySelectorAll('.filter-btn');
 
-
-// State
+// 2. Create an array to hold our tasks and track the current filter state
 let todos = [];
-let currentFilter = "all";
+let currentFilter = 'all';
 
-
-// Functions
-function createTodoElement(todo) {
-// Create and return li element
-}
-
-
-function renderTodos() {
-// Clear list and re-render based on filter
-}
-
-
-function addTodo(text) {
-// Add new todo to array and render
-}
-
-
-function toggleTodo(id) {
-// Toggle completed state
-}
-
-
-function deleteTodo(id) {
-// Remove from array and render
-}
-
-
-function updateStats() {
-// Update items left count
-}
-
-
-function filterTodos(filter) {
-// Set current filter and re-render
-}
-
-
-// Event Listeners
-form.addEventListener("submit", function(event) {
-event.preventDefault();
-// Add todo
+// 3. Add event listeners for adding a task
+addBtn.addEventListener('click', addTodo);
+todoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addTodo();
 });
 
-
-todoList.addEventListener("click", function(event) {
-// Handle click on tasks (delegation)
-});
-
-
-// Initialize
-renderTodos();
-
-To build your interactive To-Do List application, you can complete the starter JavaScript by applying the DOM manipulation techniques described in the sources. Below is the full implementation.
-Completed JavaScript Implementation
-// DOM Elements
-const form = document.getElementById("todo-form"); // [1]
-const input = document.getElementById("todo-input"); // [1]
-const todoList = document.getElementById("todo-list"); // [1]
-const itemsLeft = document.getElementById("items-left"); // [1]
-const filters = document.querySelectorAll(".filter"); // [1]
-const clearCompletedBtn = document.getElementById("clear-completed"); // [1]
-
-// State
-let todos = []; // [2]
-let currentFilter = "all"; // [2]
-
-// Functions
-function createTodoElement(todo) {
-    // Create the main list item [3]
-    const li = document.createElement("li");
-    li.dataset.id = todo.id; // Using data attributes to store ID [4]
-    if (todo.completed) {
-        li.classList.add("completed"); // Strikethrough is handled via this class [1, 5]
+function addTodo() {
+    const text = todoInput.value.trim();
+    if (text !== '') {
+        // Create a new task object
+        const newTodo = { id: Date.now(), text: text, completed: false };
+        todos.push(newTodo);
+        todoInput.value = ''; // Clear the input field
+        renderTodos();
     }
-
-    // Task text [6]
-    const span = document.createElement("span");
-    span.textContent = todo.text;
-    li.appendChild(span);
-
-    // Delete button [7]
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "×";
-    deleteBtn.className = "delete-btn";
-    li.appendChild(deleteBtn);
-
-    return li;
 }
 
-function renderTodos() {
-    // Clear the existing list [8]
-    todoList.innerHTML = "";
-
-    // Filter todos based on current state [1]
-    const filteredTodos = todos.filter(todo => {
-        if (currentFilter === "active") return !todo.completed;
-        if (currentFilter === "completed") return todo.completed;
-        return true;
-    });
-
-    // Dynamically add elements [2, 7]
-    filteredTodos.forEach(todo => {
-        todoList.appendChild(createTodoElement(todo));
-    });
-
-    updateStats();
-}
-
-function addTodo(text) {
-    const newTodo = {
-        id: Date.now(), // Unique ID for identification
-        text: text,
-        completed: false
-    };
-    todos.push(newTodo);
-    renderTodos();
-}
-
-function toggleTodo(id) {
-    todos = todos.map(todo => 
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-    renderTodos();
-}
-
-function deleteTodo(id) {
-    todos = todos.filter(todo => todo.id !== id); // [2]
-    renderTodos();
-}
-
-function updateStats() {
-    // Calculate items that are not completed [1]
-    const activeCount = todos.filter(t => !t.completed).length;
-    itemsLeft.textContent = `${activeCount} item${activeCount !== 1 ? 's' : ''} left`; // [6]
-}
-
-// Event Listeners
-form.addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent page refresh [2, 9]
-    const text = input.value.trim();
-    if (text !== "") { // Empty tasks not allowed [5]
-        addTodo(text);
-        input.value = ""; // Clear input after adding [5]
-    }
-});
-
-// Event Delegation for clicking on tasks or delete buttons [10, 11]
-todoList.addEventListener("click", function(event) {
-    const li = event.target.closest("li");
+// 4. Handle clicking inside the list (Checking off or Deleting)
+todoList.addEventListener('click', (e) => {
+    const li = e.target.closest('li');
     if (!li) return;
     
     const id = Number(li.dataset.id);
 
-    if (event.target.classList.contains("delete-btn")) {
-        deleteTodo(id);
-    } else {
-        toggleTodo(id);
+    // If the delete button was clicked
+    if (e.target.classList.contains('delete-btn')) {
+        todos = todos.filter(todo => todo.id !== id);
+    } 
+    // If the checkbox was clicked
+    else if (e.target.type === 'checkbox') {
+        const todo = todos.find(todo => todo.id === id);
+        if (todo) todo.completed = e.target.checked;
     }
+    
+    renderTodos();
 });
 
-// Filter button functionality [4, 12]
-filters.forEach(button => {
-    button.addEventListener("click", (e) => {
-        // Update active filter styling
-        filters.forEach(btn => btn.classList.remove("active"));
-        e.target.classList.add("active");
-
-        // Set filter state and re-render
-        currentFilter = e.target.dataset.filter;
+// 5. Handle Filter Buttons
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Remove 'active' class from all buttons, add to the clicked one
+        filterBtns.forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // Update current filter state based on button ID
+        currentFilter = e.target.id.replace('filter-', '');
         renderTodos();
     });
 });
 
-// Clear Completed functionality [1]
-clearCompletedBtn.addEventListener("click", () => {
-    todos = todos.filter(todo => !todo.completed);
-    renderTodos();
-});
-
-// Bonus: Edit Tasks (Double-click) [1, 13, 14]
-todoList.addEventListener("dblclick", function(event) {
-    if (event.target.tagName === "SPAN") {
-        const li = event.target.closest("li");
-        const id = Number(li.dataset.id);
-        const originalText = event.target.textContent;
-        
-        const editInput = document.createElement("input");
-        editInput.type = "text";
-        editInput.value = originalText;
-        li.innerHTML = "";
-        li.appendChild(editInput);
-        editInput.focus();
-
-        const saveEdit = () => {
-            const newText = editInput.value.trim();
-            if (newText) {
-                todos = todos.map(t => t.id === id ? { ...t, text: newText } : t);
-            }
-            renderTodos();
-        };
-
-        editInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") saveEdit(); // [14]
-            if (e.key === "Escape") renderTodos(); // Cancel [14]
-        });
-
-        editInput.addEventListener("blur", saveEdit); // Save on click away
+// 6. Update the display and the stats
+function renderTodos() {
+    // Filter the tasks based on the active tab
+    let filteredTodos = todos;
+    if (currentFilter === 'active') {
+        filteredTodos = todos.filter(t => !t.completed);
+    } else if (currentFilter === 'completed') {
+        filteredTodos = todos.filter(t => t.completed);
     }
-});
 
-// Initialize
-renderTodos();
+    // Clear the current list
+    todoList.innerHTML = '';
+
+    // Render the filtered tasks
+    filteredTodos.forEach(todo => {
+        const li = document.createElement('li');
+        li.dataset.id = todo.id;
+        li.innerHTML = `
+            <input type="checkbox" style="margin-right: 12px; transform: scale(1.2); cursor: pointer;" ${todo.completed ? 'checked' : ''}>
+            <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.text}</span>
+            <button class="delete-btn">Delete</button>
+        `;
+        todoList.appendChild(li);
+    });
+
+    // Update the stats bar
+    updateStats();
+}
+
+function updateStats() {
+    totalCount.textContent = todos.length;
+    const activeTasks = todos.filter(t => !t.completed).length;
+    activeCount.textContent = activeTasks;
+    doneCount.textContent = todos.length - activeTasks;
+}
