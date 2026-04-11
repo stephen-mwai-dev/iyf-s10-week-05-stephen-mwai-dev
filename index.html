@@ -1,35 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>To-Do List</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium To-Do List</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <h1>My To-Do List</h1>
-        
-        <form id="todo-form">
-            <input type="text" id="todo-input" placeholder="What needs to be done?" required>
-            <button type="submit">Add</button>
-        </form>
-        
-        <div class="filters">
-            <button class="filter active" data-filter="all">All</button>
-            <button class="filter" data-filter="active">Active</button>
-            <button class="filter" data-filter="completed">Completed</button>
-        </div>
-        
-        <ul id="todo-list">
-            <!-- Tasks will be added here -->
-        </ul>
-        
-        <div class="stats">
-            <span id="items-left">0 items left</span>
-            <button id="clear-completed">Clear Completed</button>
-        </div>
+      <h1>My To-Do List</h1>
+      <div class="stats-bar">
+        <div class="stat-item">Total: <span id="totalCount">0</span></div>
+        <div class="stat-item">Active: <span id="activeCount">0</span></div>
+        <div class="stat-item">Completed: <span id="doneCount">0</span></div>
+      </div>
+      <div class="input-group">
+        <input type="text" id="todoInput" placeholder="Add a new task..." />
+        <button id="addBtn">Add</button>
+      </div>
+      <ul id="todoList"></ul>
+      <div class="filters">
+        <button class="filter-btn active" id="filter-all">All</button>
+        <button class="filter-btn" id="filter-active">Active</button>
+        <button class="filter-btn" id="filter-completed">Completed</button>
+      </div>
     </div>
-    
-    <script src="app.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
